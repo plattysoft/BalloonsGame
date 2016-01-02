@@ -125,20 +125,26 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public synchronized boolean onTouch(View v, MotionEvent event) {
         // On any motion down, calculate colisions with the current point
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN ||
                 event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-            mDummyObject[event.getActionIndex()].init(event);
-            mDummyObject[event.getActionIndex()].addToGameEngine(mGameEngine, 0);
+            if (mDummyObject[event.getActionIndex()].isValid()) {
+                mDummyObject[event.getActionIndex()].init(event);
+                mDummyObject[event.getActionIndex()].addToGameEngine(mGameEngine, 0);
+            }
             return true;
         }
         return false;
     }
 
     public static class DummyObject extends Sprite {
+        private int mIndex;
+        private boolean mValid;
+
         public DummyObject(GameEngine gameEngine) {
             super(gameEngine, R.drawable.particle_asteroid_1, BodyType.Circular);
+            mValid = true;
         }
 
 
@@ -148,13 +154,25 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
         }
 
         @Override
+        public void onRemovedFromGameEngine() {
+            super.onRemovedFromGameEngine();
+            mValid = true;
+        }
+
+        @Override
         public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
             gameEngine.removeGameObject(this);
         }
 
         public void init(MotionEvent event) {
+            mValid = false;
             mX = event.getX(event.getActionIndex());
             mY = event.getY(event.getActionIndex());
+            mIndex = event.getActionIndex();
+        }
+
+        public boolean isValid() {
+            return mValid;
         }
     }
 }

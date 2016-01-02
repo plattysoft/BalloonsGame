@@ -193,6 +193,10 @@ public class GameEngine {
     }
 
     private void addToLayerNow (GameObject object) {
+        // TEmporary safety check to avoid some race conditions (which should be fixed)
+        if (object == null) {
+            return;
+        }
         int layer = object.mLayer;
         while (mLayers.size() <= layer) {
             mLayers.add(new ArrayList<GameObject>());
