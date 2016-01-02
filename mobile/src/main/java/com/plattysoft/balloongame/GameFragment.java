@@ -23,7 +23,7 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
 
     private GameEngine mGameEngine;
 
-    private DummyObject mDummyObject;
+    private DummyObject[] mDummyObject = new DummyObject[10];
 
     public GameFragment() {
     }
@@ -53,7 +53,9 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
         }
         gameView.postInvalidate();
 
-        mDummyObject = new DummyObject(mGameEngine);
+        for (int i=0; i<mDummyObject.length; i++) {
+            mDummyObject[i] = new DummyObject(mGameEngine);
+        }
 
         getView().findViewById(R.id.gameView).setOnTouchListener(this);
     }
@@ -125,10 +127,10 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         // On any motion down, calculate colisions with the current point
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            mGameEngine.
-            mDummyObject.init(event);
-            mDummyObject.addToGameEngine(mGameEngine, 0);
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN ||
+                event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+            mDummyObject[event.getActionIndex()].init(event);
+            mDummyObject[event.getActionIndex()].addToGameEngine(mGameEngine, 0);
             return true;
         }
         return false;
@@ -151,8 +153,8 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
         }
 
         public void init(MotionEvent event) {
-            mX = event.getX();
-            mY = event.getY();
+            mX = event.getX(event.getActionIndex());
+            mY = event.getY(event.getActionIndex());
         }
     }
 }

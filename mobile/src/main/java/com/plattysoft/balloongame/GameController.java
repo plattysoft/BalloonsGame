@@ -41,7 +41,6 @@ public class GameController extends GameObject {
     public void onGameEvent(GameEvent gameEvent) {
     }
 
-
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
         mCurrentMillis += elapsedMillis;
@@ -62,7 +61,7 @@ public class GameController extends GameObject {
         // This game object does not draw anything
     }
 
-    public void returnToPool(Balloon asteroid) {
-        mBalloonPool.add(asteroid);
+    public void returnToPool(Balloon balloon) {
+        mBalloonPool.add(balloon);
     }
 }
