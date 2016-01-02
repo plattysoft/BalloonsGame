@@ -48,7 +48,7 @@ public class MainMenuFragment extends BalloonGameBaseFragment implements View.On
 
     private void animateTitles() {
         View title = getView().findViewById(R.id.main_title);
-        Animation titleAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.title_enter);
+        Animation titleAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.title_enter);
         title.startAnimation(titleAnimation);
 
     }
