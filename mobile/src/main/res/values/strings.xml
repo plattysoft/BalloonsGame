@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Balloons!</string>
+    <string name="title_activity_main">Balloons!</string>
+    <string name="start">START</string>
+    <string name="pause_dialog_title">Pause</string>
+    <string name="game_title">Balloons!</string>
+    <string name="exit_confirm">Exit Game</string>
+</resources>

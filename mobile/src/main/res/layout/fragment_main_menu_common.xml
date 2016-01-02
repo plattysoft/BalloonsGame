@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:textColor="@color/text_color"
+        android:id="@+id/main_title"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textSize="60dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/game_title"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        style="@style/iconButton"
+        android:id="@+id/btn_start"
+        android:layout_centerInParent="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/play"
+        android:padding="10dp"
+        />
+
+    <ImageView
+        style="@style/iconButton"
+        android:id="@+id/btn_sound"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:src="@drawable/sounds_on_no_bg"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        />
+
+    <ImageView
+        style="@style/iconButton"
+        android:id="@+id/btn_music"
+        android:layout_alignBottom="@+id/btn_sound"
+        android:src="@drawable/music_on_no_bg"
+        android:layout_toLeftOf="@+id/btn_sound"
+        />
+</RelativeLayout>
