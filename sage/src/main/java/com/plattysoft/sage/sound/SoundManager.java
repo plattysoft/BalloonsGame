@@ -13,7 +13,7 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
-public final class SoundManager {
+public abstract class SoundManager {
 
 	private static final int MAX_STREAMS = 10;
 	private static final float DEFAULT_MUSIC_VOLUME = 0.6f;
@@ -23,7 +23,7 @@ public final class SoundManager {
 
 	private HashMap<GameEvent, Integer> mSoundsMap;
 	
-	private Context mContext;
+	protected Context mContext;
 	private SoundPool mSoundPool;
 
 	private boolean mSoundEnabled;
@@ -40,7 +40,7 @@ public final class SoundManager {
 		loadIfNeeded();
 	}
 
-	private void loadEventSound(Context context, GameEvent event, String... filename) {
+	protected void loadEventSound(Context context, GameEvent event, String... filename) {
 //		mSoundsMap.put(event,new SoundInfo(context, mSoundPool, filename));
 		try {
 			AssetFileDescriptor descriptor = context.getAssets().openFd("sfx/" + filename[0]);
@@ -74,8 +74,10 @@ public final class SoundManager {
 	private void loadSounds() {
 		createSoundPool();
 		mSoundsMap = new HashMap<GameEvent, Integer>();
-		loadEventSound(mContext, GameEvent.BalloonHit, "balloon_pop.wav");
+		loadEventSounds(mSoundsMap);
 	}
+
+	protected abstract void loadEventSounds(HashMap<GameEvent, Integer> mSoundsMap);
 
 	private void createSoundPool() {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -97,7 +99,7 @@ public final class SoundManager {
 		try {
 			// Important to not reuse it. It can be on a strange state
 			mBgPlayer = new MediaPlayer();
-			AssetFileDescriptor afd = mContext.getAssets().openFd("sfx/Dean_Caedab_-_Everyday_Success.mp3");
+			AssetFileDescriptor afd = mContext.getAssets().openFd(getMusicFileAssetPath());
 			mBgPlayer.setDataSource(afd.getFileDescriptor(),
 					afd.getStartOffset(), afd.getLength());
 			mBgPlayer.setLooping(true);
@@ -108,6 +110,8 @@ public final class SoundManager {
 			e.printStackTrace();
 		}
 	}
+
+	protected abstract String getMusicFileAssetPath();
 
 	public void pauseBgMusic() {
 		if (mMusicEnabled) {
