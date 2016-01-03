@@ -16,13 +16,12 @@ import com.plattysoft.sage.sound.SoundManager;
 /**
  * Created by Raul Portales on 02/01/16.
  */
-public class GameBaseActivity extends Activity {
+public abstract class GameBaseActivity extends Activity {
 
     protected static final String TAG_FRAGMENT = "content";
 
     private Typeface mCustomTypeface;
     private BaseCustomDialog mCurrentDialog;
-    private boolean mShowingDialog;
     private SoundManager mSoundManager;
 
     @Override
@@ -31,15 +30,13 @@ public class GameBaseActivity extends Activity {
         setContentView(R.layout.activity_main);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         mCustomTypeface = Typeface.createFromAsset(getAssets(), getTypefacePath());
-        mSoundManager = new SoundManager(getApplicationContext());
+        mSoundManager = createSoundManager();
     }
+
+    protected abstract SoundManager createSoundManager();
 
     protected String getTypefacePath() {
         return "";
-    }
-
-    public void setShowingDialog (boolean b) {
-        mShowingDialog = b;
     }
 
     public void showDialog (BaseCustomDialog newDialog, boolean dismissOtherDialog) {

@@ -105,7 +105,7 @@ public class GameEngine {
     public void stopGame() {
         if (mUpdateThread != null) {
             synchronized (mLayers) {
-                onGameEvent(GameEvent.GameFinished);
+                onGameEvent(new GameEvent.GameFinished());
             }
             mUpdateThread.stopGame();
             mUpdateThread = null;

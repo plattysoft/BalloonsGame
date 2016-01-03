@@ -7,6 +7,7 @@ import io.fabric.sdk.android.Fabric;
 import com.crashlytics.android.Crashlytics;
 
 import com.plattysoft.sage.GameBaseActivity;
+import com.plattysoft.sage.sound.SoundManager;
 
 
 public class BalloonGameActivity extends GameBaseActivity {
@@ -20,6 +21,11 @@ public class BalloonGameActivity extends GameBaseActivity {
                     .add(R.id.container,createMenuFragment(), TAG_FRAGMENT)
                     .commit();
         }
+    }
+
+    @Override
+    protected SoundManager createSoundManager() {
+        return new BalloonsSoundManager(getApplicationContext());
     }
 
     protected String getTypefacePath() {
