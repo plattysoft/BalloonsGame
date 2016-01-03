@@ -3,6 +3,7 @@
 A simple balloon popper game for toddlers built using the concepts explained in the book ["Mastering Android Game Development"](https://www.packtpub.com/game-development/mastering-android-game-development), also by Raul Portales.
 
 Balloons! is licensed under Apache license.
+
 SAGE (Simple Android Game Engine) is licensed under Apache license as well (it will get its own repo eventually)
 
 ## Credits:
