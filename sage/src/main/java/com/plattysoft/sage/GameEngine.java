@@ -145,7 +145,9 @@ public class GameEngine {
     public void addGameObject(final GameObject gameObject, int layer) {
         gameObject.mLayer = layer;
         if (isRunning()){
-            mObjectsToAdd.add(gameObject);
+            synchronized (mLayers) {
+                mObjectsToAdd.add(gameObject);
+            }
         }
         else {
             addToLayerNow(gameObject);
@@ -154,7 +156,9 @@ public class GameEngine {
     }
 
     public void removeGameObject(final GameObject gameObject) {
-        mObjectsToRemove.add(gameObject);
+        synchronized (mLayers) {
+            mObjectsToRemove.add(gameObject);
+        }
         mActivity.runOnUiThread(gameObject.mOnRemovedRunnable);
     }
 
@@ -194,9 +198,9 @@ public class GameEngine {
 
     private void addToLayerNow (GameObject object) {
         // TEmporary safety check to avoid some race conditions (which should be fixed)
-        if (object == null) {
-            return;
-        }
+//        if (object == null) {
+//            return;
+//        }
         int layer = object.mLayer;
         while (mLayers.size() <= layer) {
             mLayers.add(new ArrayList<GameObject>());

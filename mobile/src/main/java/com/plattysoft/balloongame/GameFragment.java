@@ -15,15 +15,19 @@ import com.plattysoft.sage.GameEngine;
 import com.plattysoft.sage.GameView;
 import com.plattysoft.sage.Sprite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 @SuppressLint("NewApi")
 public class GameFragment extends BalloonGameBaseFragment implements InputManager.InputDeviceListener, PauseDialog.PauseDialogListener, View.OnTouchListener {
 
+    private static final int DUMMY_OBJECT_POOL_SIZE = 10;
     private GameEngine mGameEngine;
 
-    private DummyObject[] mDummyObject = new DummyObject[10];
+    private List<DummyObject> mDummyObjectPool = new ArrayList<DummyObject>();
 
     public GameFragment() {
     }
@@ -53,8 +57,8 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
         }
         gameView.postInvalidate();
 
-        for (int i=0; i<mDummyObject.length; i++) {
-            mDummyObject[i] = new DummyObject(mGameEngine);
+        for (int i=0; i<DUMMY_OBJECT_POOL_SIZE; i++) {
+            mDummyObjectPool.add(new DummyObject(mGameEngine));
         }
 
         getView().findViewById(R.id.gameView).setOnTouchListener(this);
@@ -129,22 +133,22 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
         // On any motion down, calculate colisions with the current point
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN ||
                 event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-            if (mDummyObject[event.getActionIndex()].isValid()) {
-                mDummyObject[event.getActionIndex()].init(event);
-                mDummyObject[event.getActionIndex()].addToGameEngine(mGameEngine, 0);
+            if (!mDummyObjectPool.isEmpty()) {
+                DummyObject dummy = mDummyObjectPool.remove(0);
+                dummy.init(event);
+                dummy.addToGameEngine(mGameEngine, 0);
             }
             return true;
         }
         return false;
     }
 
-    public static class DummyObject extends Sprite {
-        private int mIndex;
-        private boolean mValid;
+    public class DummyObject extends Sprite {
+
+        private long mTotalMilis;
 
         public DummyObject(GameEngine gameEngine) {
-            super(gameEngine, R.drawable.particle_asteroid_1, BodyType.Circular);
-            mValid = true;
+            super(gameEngine, R.drawable.touch_visual, BodyType.Circular);
         }
 
 
@@ -156,23 +160,21 @@ public class GameFragment extends BalloonGameBaseFragment implements InputManage
         @Override
         public void onRemovedFromGameEngine() {
             super.onRemovedFromGameEngine();
-            mValid = true;
+            mDummyObjectPool.add(this);
         }
 
         @Override
         public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-            gameEngine.removeGameObject(this);
+            mTotalMilis += elapsedMillis;
+            if (mTotalMilis > 200) {
+                gameEngine.removeGameObject(this);
+            }
         }
 
         public void init(MotionEvent event) {
-            mValid = false;
             mX = event.getX(event.getActionIndex());
             mY = event.getY(event.getActionIndex());
-            mIndex = event.getActionIndex();
-        }
-
-        public boolean isValid() {
-            return mValid;
+            mTotalMilis = 0;
         }
     }
 }
