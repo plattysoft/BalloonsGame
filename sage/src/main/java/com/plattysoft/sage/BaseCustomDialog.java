@@ -113,7 +113,6 @@ public abstract class BaseCustomDialog implements OnTouchListener, Animation.Ani
         hideViews();
         mIsShowing = false;
         onDismissed();
-        mParent.setShowingDialog(false);
     }
 
     @Override

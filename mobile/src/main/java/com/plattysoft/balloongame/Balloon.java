@@ -41,7 +41,7 @@ public class Balloon extends Sprite {
         mY += mSpeedY * elapsedMillis;
         // Check of the sprite goes out of the screen and return it to the pool if so
         if (mY < -mHeight) {
-            gameEngine.onGameEvent(GameEvent.BalloonMissed);
+            gameEngine.onGameEvent(BalloonGameEvent.BalloonMissed);
             removeFromGameEngine(gameEngine);
         }
     }
@@ -58,7 +58,7 @@ public class Balloon extends Sprite {
             // Explode and remove from game
             explode(gameEngine);
             removeFromGameEngine(gameEngine);
-            gameEngine.onGameEvent(GameEvent.BalloonHit);
+            gameEngine.onGameEvent(BalloonGameEvent.BalloonHit);
         }
     }
 
